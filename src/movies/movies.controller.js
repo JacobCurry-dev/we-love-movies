@@ -42,9 +42,15 @@ async function readMovieTheaters(req, res, next) {
     res.json({data: await moviesService.readMovieTheaters(movieId)})
 }
 
+async function readMovieReviews(req, res, next) {
+    const movieId = req.params.movieId
+    res.json({data: await moviesService.readMovieReviews(movieId)})
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   listIfShowing: asyncErrorBoundary(listIfShowing),
   read: [asyncErrorBoundary(movieExists), read],
-  readMovieTheaters: [asyncErrorBoundary(movieExists), readMovieTheaters]
+  readMovieTheaters: [asyncErrorBoundary(movieExists), readMovieTheaters],
+  readMovieReviews: [asyncErrorBoundary(movieExists), readMovieReviews]
 };
