@@ -5,7 +5,7 @@ const movieExists = (req, res, next) => {
     moviesService
       .read(req.params.movieId)
       .then((movie) => {
-        if (movie) {
+        if (movie.movieId) {
           res.locals.movie = movie;
           return next();
         }
