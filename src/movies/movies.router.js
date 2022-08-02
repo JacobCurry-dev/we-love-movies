@@ -3,6 +3,7 @@ const controller = require("./movies.controller");
 const methodNotAllowed = require("../errors/methodNotAllowed");
 
 router.route("/")
+    .get(controller.listIfShowing)
     .get(controller.list)
     .all(methodNotAllowed);
 
