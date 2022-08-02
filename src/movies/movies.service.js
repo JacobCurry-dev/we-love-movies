@@ -12,8 +12,8 @@ const listIfShowing = () => {
     .groupBy("m.movie_id");
 };
 
-const read = (movieId) => {
-  return knex("movies").select("*").where({ movie_id: movieId }).first();
+const read = (movie_id) => {
+  return knex("movies").select("*").where({ movie_id }).first();
 };
 
 module.exports = {
