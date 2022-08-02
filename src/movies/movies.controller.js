@@ -32,13 +32,19 @@ const listIfShowing = (req, res, next) => {
   next();
 };
 
-const read = (req, res, next) => {
-  const { movie: data } = res.locals;
-  res.json({ data });
-};
+async function read(req, res, next) {
+    const movieId = req.params.movieId
+res.json({data: await moviesService.read(movieId)})
+}
+
+async function readMovieTheaters(req, res, next) {
+    const movieId = req.params.movieId
+    res.json({data: await moviesService.readMovieTheaters(movieId)})
+}
 
 module.exports = {
   list: asyncErrorBoundary(list),
   listIfShowing: asyncErrorBoundary(listIfShowing),
   read: [asyncErrorBoundary(movieExists), read],
+  readMovieTheaters: [asyncErrorBoundary(movieExists), readMovieTheaters]
 };

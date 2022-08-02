@@ -13,4 +13,9 @@ router
     .get(controller.read)
     .all(methodNotAllowed);
 
+router
+    .route("/:movieId/theaters")
+    .get(controller.readMovieTheaters)
+    .all(methodNotAllowed);
+
 module.exports = router;
