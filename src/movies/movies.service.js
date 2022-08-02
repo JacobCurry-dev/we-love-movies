@@ -38,7 +38,6 @@ const readMovieReviews = (movie_id) => {
         .join("critics as c", "c.critic_id", "r.critic_id")
         .select("r.*", "c.*")
         .where({ "r.movie_id": movie_id })
-        // .first()
         .then((reviews) => {
         return reviews.map((review) => addCritic(review))
 })

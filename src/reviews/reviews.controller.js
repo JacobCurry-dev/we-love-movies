@@ -14,20 +14,51 @@ const reviewExists = (req, res, next) => {
       .catch(next);
 }
 
+const VALID_PROPERTIES = [
+    "review_id",
+    "content",
+    "score",
+    "created_at",
+    "updated_at",
+    "critic_id",
+    "movie_id",
+    "critic"
+]
+
+function hasOnlyValidProperties(req, res, next) {
+    const { data = {} } = req.body;
+  
+    const invalidFields = Object.keys(data).filter(
+      (field) => !VALID_PROPERTIES.includes(field)
+    );
+  
+    if (invalidFields.length) {
+      return next({
+        status: 400,
+        message: `Invalid field(s): ${invalidFields.join(", ")}`,
+      });
+    }
+    next();
+  }
+
 async function destroy(req, res, next){
     const { review } = res.locals
-    console.log("REVIEW", review)
     await reviewsService.delete(review.review_id)
     res.sendStatus(204)
 }
 
-module.exports = {
-    delete: [asyncErrorBoundary(reviewExists), destroy]
-};
+async function update(req, res, next) {
+    const reviewId = req.params.reviewId
+    const reviewData = req.body.data
+    console.log("DATA??", req.body.data)
+    const updatedReview = {
+        ...reviewData,
+        review_id: reviewId
+    }
+    res.json({ data: await reviewsService.update(updatedReview) })
+}
 
-// function destroy(req, res, next) {
-//     suppliersService
-//       .delete(res.locals.supplier.supplier_id)
-//       .then(() => res.sendStatus(204))
-//       .catch(next);
-//   }
+module.exports = {
+    delete: [asyncErrorBoundary(reviewExists), destroy],
+    update: [asyncErrorBoundary(reviewExists), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(update)],
+};
